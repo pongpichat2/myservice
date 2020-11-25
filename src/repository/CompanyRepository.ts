@@ -1,4 +1,18 @@
-import { EntityRepository, Repository } from 'typeorm'
+import { EntityRepository, getCustomRepository, Repository } from 'typeorm'
 import { Company } from '../models/Company'
-@EntityRepository(Company)
-export class CompanyRepository extends Repository<Company> {}
+import { User } from '../models/User'
+
+@EntityRepository(User)
+export class CompanyRepository extends Repository<User> {
+	public async companyUser(user: User, company: Company): Promise<User[] | undefined> {
+		const result = await getCustomRepository(CompanyRepository)
+			.createQueryBuilder('user')
+			.leftJoinAndSelect('user.companyId', 'company')
+			.where('company.companyId =:companyId', {
+				companyId: 1,
+			})
+			.getMany()
+
+		return result
+	}
+}

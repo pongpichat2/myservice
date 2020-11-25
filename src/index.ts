@@ -8,6 +8,7 @@ import path from 'path'
 import 'reflect-metadata'
 import { getConnection } from 'typeorm'
 import config from './configs/config'
+import { companyController } from './controllers/CompanyController'
 import { userController } from './controllers/UserController'
 import routes from './routes/api'
 import { dbConnection } from './utils/db-connection'
@@ -49,7 +50,7 @@ class ClarisApp {
 				app.post('/api/createUser', userController.createUser)
 				app.put('/api/updateuser', userController.updateUser)
 				app.post('/api/deleteuser', userController.deleteuser)
-				app.post('/api/company', userController.company)
+				app.post('/api/company', companyController.companyUser)
 
 				app.get('/', (req: Request, res: Response) => {
 					console.log(process.env)
