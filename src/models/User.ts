@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Company } from './Company'
 
 @Entity({ name: 'user' })
 export class User {
@@ -13,4 +14,11 @@ export class User {
 
 	@Column({ name: 'status', type: 'int' })
 	public status: number
+
+	@Index()
+	@ManyToOne((_type) => Company, (companyId) => companyId.user, {
+		nullable: true,
+	})
+	@JoinColumn({ name: 'companyId' })
+	public companyId: Company
 }

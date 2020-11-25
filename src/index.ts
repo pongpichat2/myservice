@@ -45,6 +45,11 @@ class ClarisApp {
 				app.use(cors())
 				// app.use('/api', routes)
 				app.post('/api/login', userController.login)
+				app.get('/api/getuser', userController.getuser)
+				app.post('/api/createUser', userController.createUser)
+				app.put('/api/updateuser', userController.updateUser)
+				app.post('/api/deleteuser', userController.deleteuser)
+				app.post('/api/company', userController.company)
 
 				app.get('/', (req: Request, res: Response) => {
 					console.log(process.env)
