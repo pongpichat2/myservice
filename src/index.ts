@@ -8,11 +8,15 @@ import path from 'path'
 import 'reflect-metadata'
 import { getConnection } from 'typeorm'
 import config from './configs/config'
+import { userController } from './controllers/UserController'
+import routes from './routes/api'
 import { dbConnection } from './utils/db-connection'
 
 class ClarisApp {
 	public async init() {
+		console.log('log::', routes)
 		const app = express()
+		console.log('initialize database')
 		try {
 			await dbConnection.initDatabase()
 			const connection = getConnection()
@@ -35,11 +39,12 @@ class ClarisApp {
 				Sentry.init({
 					dsn: 'https://4b4b0af4328d4f399dfd02de5e74a5ab@o390647.ingest.sentry.io/5235389',
 				})
-
 				// The request handler must be the first middleware on the app
 				app.use(Sentry.Handlers.requestHandler())
 				app.use(Sentry.Handlers.errorHandler())
 				app.use(cors())
+				// app.use('/api', routes)
+				app.post('/api/login', userController.login)
 
 				app.get('/', (req: Request, res: Response) => {
 					console.log(process.env)
@@ -56,7 +61,6 @@ class ClarisApp {
 					)
 					next()
 				})
-
 				app.listen(port, () => {
 					console.log(`Server running on port: ${port}`)
 				})

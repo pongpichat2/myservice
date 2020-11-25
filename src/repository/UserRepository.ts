@@ -1,12 +1,13 @@
 import { EntityRepository, getCustomRepository, Repository } from 'typeorm'
-import { Company } from '../models/User'
-@EntityRepository(Company)
-export class CompanyRepository extends Repository<Company> {
-	public async findBuyerCompanyByBuyerId(companyId: number): Promise<Company | undefined> {
-		const result = await getCustomRepository(CompanyRepository)
-			.createQueryBuilder('company')
-			.where('company.companyId =:company', {
-				company: companyId,
+import { User } from '../models/User'
+@EntityRepository(User)
+export class UserRepository extends Repository<User> {
+	public async login(user: User): Promise<User | undefined> {
+		const result = await getCustomRepository(UserRepository)
+			.createQueryBuilder('user')
+			.where('user.username =:username and user.password =:password', {
+				username: user.username,
+				password: user.password,
 			})
 			.getOne()
 		return result
