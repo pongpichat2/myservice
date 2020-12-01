@@ -3,9 +3,11 @@ import { User } from '../models/User'
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 	public async login(user: User): Promise<User | undefined> {
+		console.log(user.username)
+		console.log(user.password)
+
 		const result = await getCustomRepository(UserRepository)
 			.createQueryBuilder('user')
-
 			.where('user.username =:username and user.password =:password', {
 				username: user.username,
 				password: user.password,
@@ -30,14 +32,21 @@ export class UserRepository extends Repository<User> {
 		const checkdata = await getCustomRepository(UserRepository)
 			.createQueryBuilder('user')
 
-			.where('user.username =:username and user.password =:password', {
+			.where('user.username =:username', {
 				username: user.username,
-				password: user.password,
 			})
-			.getOne()
+			.getMany()
 
-		const result = await getCustomRepository(UserRepository).save(user)
-		return result
+		if (checkdata.length > 0) {
+			const result: any = {
+				massage: 'User have a Data',
+				responseCode: 204,
+			}
+			return result
+		} else {
+			const result: User = await getCustomRepository(UserRepository).save(user)
+			return result
+		}
 	}
 
 	public async updateuser(user: User): Promise<User | undefined> {

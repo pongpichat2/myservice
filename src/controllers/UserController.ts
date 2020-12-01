@@ -8,14 +8,19 @@ import { UserRepository } from '../repository/UserRepository'
 class UserController {
 	public async login(req: Request, res: Response): Promise<Response> {
 		const user: User = req.body
+		console.log('Password It is : ', user.password)
+
 		const result = await getCustomRepository(UserRepository).login(user)
 		if (result) {
+			console.log('Login success')
+
 			return res.status(200).json({
 				responseBody: result,
 				message: `login success`,
 				responseCode: 200,
 			})
 		} else {
+			console.log('Login Fail')
 			return res.status(200).json({
 				responseBody: result,
 				message: `login fail`,
@@ -26,7 +31,7 @@ class UserController {
 
 	public async getuser(req: Request, res: Response): Promise<Response> {
 		const result: User[] | undefined = await getCustomRepository(UserRepository).getuser()
-		if (result?.length > 0) {
+		if (result.length > 0) {
 			return res.status(200).json({
 				responseBody: result,
 				message: `success`,
@@ -44,8 +49,15 @@ class UserController {
 	public async createUser(req: Request, res: Response): Promise<Response> {
 		const user: User = req.body
 		user.status = 1
+		user.companyId = 1
+
 		const result: User | undefined = await getCustomRepository(UserRepository).createUser(user)
-		return res.status(200).json(result)
+
+		console.log(result)
+
+		return res.status(200).json({
+			responseBody: result,
+		})
 	}
 
 	public async updateUser(req: Request, res: Response): Promise<Response> {
